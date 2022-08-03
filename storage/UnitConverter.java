@@ -49,6 +49,13 @@ public class UnitConverter
 		return val + " " + unit;
 	}
 
+	public static String bytesToHumanReadable(String bytes)
+	{
+		BigInteger val = new BigInteger(bytes);
+
+		return bytesToHumanReadable(val);
+	}
+
 	public static BigInteger humanReadableToBytes(String value)
 	{
 		String[] input = value.split(" ");

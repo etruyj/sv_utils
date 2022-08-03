@@ -79,6 +79,7 @@ public class Logger
 		catch(IOException e)
 		{
 			writeLog("ERROR: " + e.getMessage());
+			e.printStackTrace();
 		}
 	}
 
