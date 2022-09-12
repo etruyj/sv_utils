@@ -2,7 +2,8 @@
 // Table.java
 // 	Description:
 // 		Outputs an ArrayList<OutputFormat> in either CSV or
-// 		table format. 
+// 		table format by converting the variable to a table format.
+// 		Failed conversions are output to the shell.
 //===================================================================
 
 package com.socialvagrancy.utils.ui.display;
@@ -18,9 +19,10 @@ public class Table
 		int line = 0;
 		int columns = 0;
 		int i = 0;
-		int indent = 0;
+	//	int indent = 0; commented out and as part of the original script.
 		boolean building_table = true;
 		boolean build_successful = true;
+		String line_start = "";
 
 		String current_heading = "none";
 		String[] headers;
@@ -32,65 +34,54 @@ public class Table
 		while(building_table)
 		{	
 			headers = output.get(i).key.split(">");
-		
-		
-			// Print categories.	
-			if(output.get(i).value == null)
+			
+			// Store the first key to mark the start of the line
+			// When that key is hit again, we'll start a new table
+			// row.
+			if(i == 0)
 			{
-		
-				if(!headers[headers.length-1].equals(current_heading))
+				line_start = output.get(i).key;
+			}
+			else if(output.get(i).key.equals(line_start))
+			{
+				// Increment to the next line.
+				// If this is the first time the line is incremented
+				// store the number of columns to add to the table.
+				if(line==0)
 				{
-					// Current header isn't the same as the reference.
-					indent++;
-					current_heading = headers[headers.length-1];
+					columns = i;
+				}
 
-				}
-				else
-				{
-					indent--;
-					line++;
-					// Make sure we're deeper than the root 
-					// element of the tree.
-					if(headers.length>1)
-					{
-						current_heading = headers[headers.length-2];
-					}
-					else
-					{
-						current_heading = "";
-					}
-				}
+				line++;
 			}
-			else
+			
+			// Store the keys as column headings
+			// Allowing for tiered data and document formats such
+			// as XML, blank headings will need to be ignored.
+			if(line == 0)
 			{
-				if(indent != 1)
-				{
-					// Multi-tiered data
-					// Unable to use this output format
-					building_table = false;
-					build_successful = false;
-				}
-				
-				headings.add(headers[1]);
-				values.add(output.get(i).value);
-				
-				if(line == 0)
-				{
-					columns++;
-				}
+				headings.add(headers[headers.length-1]);
 			}
+
+			values.add(output.get(i).value);
 
 			i++;
 
 			if(i >= output.size())
 			{
 				building_table=false;
+
+				// Catch single line inputs.
+				if(line == 0)
+				{
+					columns = headings.size();
+				}
 			}
 		}
 
 		if(build_successful)
 		{
-			headings.subList(columns, headings.size()).clear();
+			// headings.subList(columns, headings.size()).clear(); // mark for deletion
 
 			if(output_format.equals("table"))
 			{
@@ -104,7 +95,8 @@ public class Table
 		else
 		{
 			// Print in shell format if table doesn't fit.
-			Print.shell(output);
+			//Print.shell(output);
+			System.err.println("ERROR: Unable to format table for display.");
 		}
 
 	}
@@ -151,13 +143,13 @@ public class Table
 	private static void printCSV(ArrayList<String> headers, ArrayList<String> values, int columns)
 	{
 		int column = 0;
-
+		
 		// Print headers
 		for(int i = 0; i < columns; i++)
 		{
 			System.out.print(headers.get(i));
 			
-			if(i<columns-2)
+			if(i<columns-1)
 			{
 				System.out.print(",");
 			}
