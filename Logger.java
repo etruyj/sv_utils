@@ -43,24 +43,47 @@ public class Logger
 
 	//=================================================
 	// Log calls to streamline the logging command.
-	// INFO - 1
-	// WARN - 2
-	// ERR - 3
+	// DEBUG - 1
+	// INFO - 2
+	// WARN - 3
+	// ERR - 4
 	//=================================================
 
+	// Version 1.7 logs
+	public void debug(String message)
+	{
+		logWithSizedLogRotation("DEBUG: " + message, 1);
+	}
+
+	public void info(String message)
+	{
+		logWithSizedLogRotation("INFO: " + message, 2);
+	}
+
+	public void warn(String message)
+	{
+		logWithSizedLogRotation("WARN: " + message, 3);
+	}
+
+	public void error(String message)
+	{
+		logWithSizedLogRotation("ERR: " + message, 4);
+	}
+
+	// Version 1.0 logs
 	public void INFO(String message)
 	{
-		logWithSizedLogRotation("INFO: " + message, 1);
+		logWithSizedLogRotation("INFO: " + message, 2);
 	}
 
 	public void WARN(String message)
 	{
-		logWithSizedLogRotation("WARN: " + message, 2);
+		logWithSizedLogRotation("WARN: " + message, 3);
 	}
 
 	public void ERR(String message)
 	{
-		logWithSizedLogRotation("ERR: " + message, 3);
+		logWithSizedLogRotation("ERR: " + message, 4);
 	}
 
 	public void checkLogs()
