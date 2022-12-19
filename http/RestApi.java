@@ -73,7 +73,7 @@ public class RestApi
 			// Configuration the connection
 			cxn.setRequestMethod("POST");
 			cxn.setDoOutput(true);
-			cxn.setRequestProperty("Content-Type", "application/json; utf-8");
+			cxn.setRequestProperty("Content-Type", "application/json");
 			cxn.setRequestProperty("Accept", "application/json");
 	
 			OutputStream output = cxn.getOutputStream();
@@ -158,7 +158,7 @@ public class RestApi
 			// Configuration the connection
 			cxn.setRequestMethod("DELETE");
 			cxn.setDoOutput(true);
-			cxn.setRequestProperty("Content-Type", "application/json; utf-8");
+			cxn.setRequestProperty("Content-Type", "application/json");
 			cxn.setRequestProperty("Accept", "application/json");
 			cxn.setRequestProperty("Authorization", token);
 
@@ -192,6 +192,46 @@ public class RestApi
 		}
 	}
 
+	public String get(String httpRequest) throws Exception
+	{
+		// Query library with a header (authorization)
+		// mostly just for logging in.
+		StringBuilder response = new StringBuilder();
+		int response_code = 0;
+
+		// Open connection		
+		try
+		{
+			URL url = new URL(httpRequest);
+			HttpURLConnection cxn = (HttpURLConnection) url.openConnection();
+		
+			// Configuration the connection
+			cxn.setRequestMethod("GET");
+			cxn.setDoOutput(true);
+			cxn.setRequestProperty("Content-Type", "application/json");
+			cxn.setRequestProperty("Accept", "application/json");
+			
+			// GET response code.
+			response_code = cxn.getResponseCode();
+			
+			// Read response	
+			BufferedReader br = new BufferedReader(new InputStreamReader(cxn.getInputStream(), "utf-8"));
+
+			String responseLine = null;
+
+			while((responseLine = br.readLine()) != null)
+			{
+				response.append(responseLine);
+			}
+		}
+		catch(Exception e)
+		{
+			throw new Exception(e.getMessage());
+		}
+
+		return response.toString();
+	}
+	
 	public String get(String httpRequest, String token) throws Exception
 	{
 		// Query library with a header (authorization)
@@ -209,7 +249,7 @@ public class RestApi
 			// Configuration the connection
 			cxn.setRequestMethod("GET");
 			cxn.setDoOutput(true);
-			cxn.setRequestProperty("Content-Type", "application/json; utf-8");
+			cxn.setRequestProperty("Content-Type", "application/json");
 			cxn.setRequestProperty("Accept", "application/json");
 			cxn.setRequestProperty("Authorization", token);
 			
@@ -259,7 +299,7 @@ public class RestApi
 			// Configuration the connection
 			cxn.setRequestMethod("POST");
 			cxn.setDoOutput(true);
-			cxn.setRequestProperty("Content-Type", "application/json; utf-8");
+			cxn.setRequestProperty("Content-Type", "application/json");
 			cxn.setRequestProperty("Accept", "application/json");
 			cxn.setRequestProperty("Authorization", token);
 
@@ -304,7 +344,7 @@ public class RestApi
 			// Configuration the connection
 			cxn.setRequestMethod("PUT");
 			cxn.setDoOutput(true);
-			cxn.setRequestProperty("Content-Type", "application/json; utf-8");
+			cxn.setRequestProperty("Content-Type", "application/json");
 			cxn.setRequestProperty("Accept", "application/json");
 			cxn.setRequestProperty("Authorization", token);
 
