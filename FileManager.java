@@ -10,6 +10,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
+import java.lang.StringBuilder;
+
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Paths;
@@ -160,5 +162,34 @@ public class FileManager
 		}
 		
 		return lastLine;
+	}
+
+	public static String readFile(String path) throws Exception
+	{
+		//===============================
+		// Reads in the input from a file
+		// and outputs it as a string. 
+		//===============================
+
+		StringBuilder text = new StringBuilder();
+
+		try
+		{
+			BufferedReader br = new BufferedReader(new FileReader(path));
+
+			String line;
+			
+			while((line = br.readLine()) != null)
+			{
+				text.append(line).append("\n");
+			}
+
+			return text.toString();
+		}
+		catch(IOException e)
+		{
+			throw e;
+		}
+
 	}
 }

@@ -67,6 +67,9 @@ public class RestApi
 		// Open connection		
 		try
 		{
+			// Remove spaces from httpRequest
+			httpRequest = parseUrl(httpRequest);
+			
 			URL url = new URL(httpRequest);
 			HttpURLConnection cxn = (HttpURLConnection) url.openConnection();
 		
@@ -152,6 +155,9 @@ public class RestApi
 		// Open connection		
 		try
 		{
+			// Remove spaces from httpRequest
+			httpRequest = parseUrl(httpRequest);
+			
 			URL url = new URL(httpRequest);
 			HttpURLConnection cxn = (HttpURLConnection) url.openConnection();
 		
@@ -202,6 +208,9 @@ public class RestApi
 		// Open connection		
 		try
 		{
+			// Remove spaces from httpRequest
+			httpRequest = parseUrl(httpRequest);
+			
 			URL url = new URL(httpRequest);
 			HttpURLConnection cxn = (HttpURLConnection) url.openConnection();
 		
@@ -243,6 +252,9 @@ public class RestApi
 		// Open connection		
 		try
 		{
+			// Remove spaces from httpRequest
+			httpRequest = parseUrl(httpRequest);
+
 			URL url = new URL(httpRequest);
 			HttpURLConnection cxn = (HttpURLConnection) url.openConnection();
 		
@@ -293,6 +305,9 @@ public class RestApi
 		// Open connection		
 		try
 		{
+			// Remove spaces from httpRequest
+			httpRequest = parseUrl(httpRequest);
+			
 			URL url = new URL(httpRequest);
 			HttpURLConnection cxn = (HttpURLConnection) url.openConnection();
 		
@@ -338,6 +353,9 @@ public class RestApi
 		// Open connection		
 		try
 		{
+			// Remove spaces from httpRequest
+			httpRequest = parseUrl(httpRequest);
+			
 			URL url = new URL(httpRequest);
 			HttpURLConnection cxn = (HttpURLConnection) url.openConnection();
 		
@@ -372,5 +390,13 @@ public class RestApi
 
 		return response.toString();
 	}
+
+	//=======================================
+	// Private Functions
+	//=======================================
 	
+	private String parseUrl(String url)
+	{
+		return url.replace(" ", "%20");
+	}
 }
