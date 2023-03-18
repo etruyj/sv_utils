@@ -3,7 +3,7 @@
 // 	Description: Handles reads to and writes from the file.
 //=========================================================================
 
-package com.socialvagrancy.utils;
+package com.socialvagrancy.utils.io;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -16,6 +16,8 @@ import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+
+import java.util.ArrayList;
 
 public class FileManager
 {
@@ -185,6 +187,36 @@ public class FileManager
 			}
 
 			return text.toString();
+		}
+		catch(IOException e)
+		{
+			throw e;
+		}
+
+	}
+
+	public static ArrayList<String> readFileIntoArray(String path) throws Exception
+	{
+		//===============================
+		// Reads the file contents into an
+		// arraylist to be used for parsing
+		// files line by line.
+		//===============================
+
+		ArrayList<String> text = new ArrayList<String>();
+
+		try
+		{
+			BufferedReader br = new BufferedReader(new FileReader(path));
+
+			String line;
+			
+			while((line = br.readLine()) != null)
+			{
+				text.add(line);
+			}
+
+			return text;
 		}
 		catch(IOException e)
 		{

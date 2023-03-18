@@ -6,10 +6,10 @@
 // 		.bz extension
 //==================================================================
 
-package com.socialvagrancy.blackpearl.logs.utils.decompressors;
+package com.socialvagrancy.utils.decompressors;
 
 import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream;
-import com.socialvagrancy.utils.Logger;
+import com.socialvagrancy.utils.io.Logger;
 
 import java.io.BufferedInputStream;
 import java.io.InputStream;

@@ -12,7 +12,7 @@
 // 		- ERROR () 	- Only API calls that result in an error.
 //===================================================================
 
-package com.socialvagrancy.utils;
+package com.socialvagrancy.utils.io;
 
 import java.io.IOException;
 
