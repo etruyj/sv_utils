@@ -295,6 +295,108 @@ public class RestApi
 		}
 	}
 	
+	public String get(String httpRequest, String token, String auth_header) throws Exception
+	{
+		// Query library with a header (authorization)
+		// mostly just for logging in.
+
+		StringBuilder response = new StringBuilder();
+		int response_code = 0;
+
+		// Open connection		
+		try
+		{
+			// Remove spaces from httpRequest
+			httpRequest = parseUrl(httpRequest);
+
+			URL url = new URL(httpRequest);
+			HttpURLConnection cxn = (HttpURLConnection) url.openConnection();
+		
+			// Configuration the connection
+			cxn.setRequestMethod("GET");
+			cxn.setDoOutput(true);
+			cxn.setRequestProperty("Content-Type", "application/json");
+			cxn.setRequestProperty("Accept", "application/json");
+			cxn.setRequestProperty(auth_header, token);
+			
+			// GET response code.
+			response_code = cxn.getResponseCode();
+
+			// Read response	
+			BufferedReader br = new BufferedReader(new InputStreamReader(cxn.getInputStream(), "utf-8"));
+
+			String responseLine = null;
+
+			while((responseLine = br.readLine()) != null)
+			{
+				response.append(responseLine);
+			}
+		}
+		catch(Exception e)
+		{
+			throw new Exception(e.getMessage());
+		}
+
+		// Check to see if there is a response.
+		// If not, return the response code instead.
+		if(token.equals("code"))
+		{
+			throw new Exception("[" + response_code + "] Unable to complete GET request.");
+		}
+		else
+		{
+			return response.toString();
+		}
+	}
+	
+	public String post(String httpRequest, String token, String auth_header, String body) throws Exception
+	{
+		// Query library without a header (authorization)
+		// mostly just for logging in.
+
+		StringBuilder response = new StringBuilder();
+		
+		// Open connection		
+		try
+		{
+			// Remove spaces from httpRequest
+			httpRequest = parseUrl(httpRequest);
+			
+			URL url = new URL(httpRequest);
+			HttpURLConnection cxn = (HttpURLConnection) url.openConnection();
+		
+			// Configuration the connection
+			cxn.setRequestMethod("POST");
+			cxn.setDoOutput(true);
+			cxn.setRequestProperty("Content-Type", "application/json");
+			cxn.setRequestProperty("Accept", "application/json");
+			cxn.setRequestProperty(auth_header, token);
+
+			if(body.length() > 0)
+			{
+				OutputStream output = cxn.getOutputStream();
+				byte[] input = body.getBytes("utf-8");
+				output.write(input, 0, input.length);
+			}
+			
+			// Read response	
+			BufferedReader br = new BufferedReader(new InputStreamReader(cxn.getInputStream(), "utf-8"));
+
+			String responseLine = null;
+
+			while((responseLine = br.readLine()) != null)
+			{
+				response.append(responseLine);
+			}
+		}
+		catch(Exception e)
+		{
+			throw new Exception(e.getMessage());
+		}
+
+		return response.toString();
+	}
+	
 	public String post(String httpRequest, String token, String body) throws Exception
 	{
 		// Query library without a header (authorization)

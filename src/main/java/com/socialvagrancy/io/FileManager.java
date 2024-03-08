@@ -8,6 +8,7 @@ package com.socialvagrancy.utils.io;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 
 import java.lang.StringBuilder;
@@ -224,4 +225,16 @@ public class FileManager
 		}
 
 	}
+
+    public static void saveFile(String file_path, String text) throws IOException {
+        // Saves the full string to a new file.
+        // This can be used with saving JSONs off to a file.
+
+        File file = new File(file_path);
+        FileWriter writer = new FileWriter(file);
+
+        writer.write(text);
+
+        writer.close();
+    }
 }
