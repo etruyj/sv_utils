@@ -1,7 +1,7 @@
 //===================================================================
 // Table.java
 // 	Description:
-// 		Outputs an ArrayList<OutputFormat> in either CSV or
+// 		Outputs an List<OutputFormat> in either CSV or
 // 		table format by converting the variable to a table format.
 // 		Failed conversions are output to the shell.
 //===================================================================
@@ -11,10 +11,11 @@ package com.socialvagrancy.utils.ui.display;
 import com.socialvagrancy.utils.ui.structures.OutputFormat;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Table
 {
-	public static void format(ArrayList<OutputFormat> output, String output_format)
+	public static void format(List<OutputFormat> output, String output_format)
 	{
 		int line = 0;
 		int columns = 0;
@@ -27,8 +28,8 @@ public class Table
 		String current_heading = "none";
 		String[] headers;
 
-		ArrayList<String> headings = new ArrayList<String>();
-		ArrayList<String> values = new ArrayList<String>();
+		List<String> headings = new ArrayList<String>();
+		List<String> values = new ArrayList<String>();
 
 		// Build the table;
 		while(building_table)
@@ -105,9 +106,9 @@ public class Table
 	// Private Functions
 	//=======================================
 
-	private static ArrayList<Integer> calculateColumnWidths(ArrayList<String> headers, ArrayList<String> values)
+	private static List<Integer> calculateColumnWidths(List<String> headers, List<String> values)
 	{
-		ArrayList<Integer> column_widths = new ArrayList<Integer>();
+		List<Integer> column_widths = new ArrayList<Integer>();
 		int itr = 0;
 
 		int column_count = headers.size();
@@ -140,7 +141,7 @@ public class Table
 		return column_widths;
 	}
 
-	private static void printCSV(ArrayList<String> headers, ArrayList<String> values, int columns)
+	private static void printCSV(List<String> headers, List<String> values, int columns)
 	{
 		int column = 0;
 		
@@ -173,7 +174,7 @@ public class Table
 			}
 		}
 	}
-	private static void printDeliminator(int columns, ArrayList<Integer> column_width, int margin)
+	private static void printDeliminator(int columns, List<Integer> column_width, int margin)
 	{
 		// Iterate through the columns
 		for(int i=0; i<column_width.size(); i++)
@@ -210,12 +211,12 @@ public class Table
 */
 	}
 
-	private static void printTable(ArrayList<String> headers, ArrayList<String> values, int columns)
+	private static void printTable(List<String> headers, List<String> values, int columns)
 	{
 		int column = 0;
 		//int column_width = 30;
 		int margin = 2;
-		ArrayList<Integer> column_widths = calculateColumnWidths(headers, values);
+		List<Integer> column_widths = calculateColumnWidths(headers, values);
 
 		// Print Top Bar
 		printDeliminator(columns, column_widths, margin);

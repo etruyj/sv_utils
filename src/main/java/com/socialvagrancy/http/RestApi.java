@@ -1,6 +1,7 @@
 package com.socialvagrancy.utils.http;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.InputStreamReader;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -15,8 +16,6 @@ import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 import java.security.cert.X509Certificate;
-
-import org.apache.hc.client5.http.HttpResponseException;
 
 public class RestApi
 {
@@ -58,42 +57,42 @@ public class RestApi
 		}
 	}
 
-	public String authenticate(String httpRequest, String body) throws Exception
+	public HttpResponse authenticate(String httpRequest, String body) 
 	{
 	    return request("POST", httpRequest, "NO_AUTH", null, body);
 	}
 	
-	public String delete(String httpRequest, String token) throws Exception
+	public HttpResponse delete(String httpRequest, String token) 
 	{
 	    return request("DELETE", httpRequest, "Authorization", token, null);
 	}
 
-	public String get(String httpRequest) throws Exception
+	public HttpResponse get(String httpRequest) 
 	{
 	    return request("GET", httpRequest, "NO_AUTH", null, null);
     }
 	
-	public String get(String httpRequest, String token) throws Exception
+	public HttpResponse get(String httpRequest, String token) 
 	{
 	    return request("GET", httpRequest, "Authorization", token, null);
     }
 	
-	public String get(String httpRequest, String token, String auth_header) throws Exception
+	public HttpResponse get(String httpRequest, String token, String auth_header) 
 	{
         return request("GET", httpRequest, auth_header, token, null);
 	}
 	
-	public String post(String httpRequest, String token, String auth_header, String body) throws Exception
+	public HttpResponse post(String httpRequest, String token, String auth_header, String body) 
 	{
 	    return request("POST", httpRequest, auth_header, token, body);
     }
 	
-	public String post(String httpRequest, String token, String body) throws Exception
+	public HttpResponse post(String httpRequest, String token, String body) 
 	{
 	    return request("POST", httpRequest, "Authorization", token, body);
     }
 	
-	public String put(String httpRequest, String token, String body) throws Exception
+	public HttpResponse put(String httpRequest, String token, String body)
 	{
 	    return request("PUT", httpRequest, "Authorization", token, body);
 	}
@@ -107,10 +106,12 @@ public class RestApi
 		return url.replace(" ", "%20");
 	}
 	
-    private String request(String method, String httpRequest, String auth_type, String token, String body)
+    private HttpResponse request(String method, String httpRequest, String auth_type, String token, String body)
 	{
 		StringBuilder response = new StringBuilder();
-		
+		int code = 0;
+        String message = "";
+
 		// Open connection		
 		// Remove spaces from httpRequest
 		httpRequest = parseUrl(httpRequest);
@@ -124,7 +125,7 @@ public class RestApi
 		    cxn.setDoOutput(true);
 		    cxn.setRequestProperty("Content-Type", "application/json");
 		    cxn.setRequestProperty("Accept", "application/json");
-		    
+		   
             if(!auth_type.equals("NO_AUTH")) {
                 cxn.setRequestProperty(auth_type, token);
             }
@@ -135,9 +136,19 @@ public class RestApi
 			    byte[] input = body.getBytes("utf-8");
 			    output.write(input, 0, input.length);
 		    }
-			
+	
+            code = cxn.getResponseCode();
+            message = cxn.getResponseMessage();
+
 		    // Read response	
-		    BufferedReader br = new BufferedReader(new InputStreamReader(cxn.getInputStream(), "utf-8"));
+		    BufferedReader br = null;
+            if(100<=code && code<=399) {
+                br = new BufferedReader(new InputStreamReader(cxn.getInputStream(), "utf-8"));
+            }
+            else
+            {
+                br = new BufferedReader(new InputStreamReader(cxn.getErrorStream(), "utf-8"));
+            }
 
 		    String responseLine = null;
 
@@ -145,12 +156,18 @@ public class RestApi
 		    {
 			    response.append(responseLine);
 		    }
-        } catch(HttpResponseException e) {
-            System.err.println("[" + e.getStatusCode() + "] " + e.getMessage());
+        } catch(FileNotFoundException e) {
+            System.err.println("[" + code + "] " + e.getMessage());
         } catch(IOException e) {
-            System.err.println("[IOException] " + e.getMessage());
+            System.err.println("[" + code + "][IOException] " + e.getMessage());
         }
 
-		return response.toString();
+		HttpResponse http_response = new HttpResponse();
+        
+        http_response.setStatusCode(code);
+        http_response.setResponseMessage(message);
+        http_response.setBody(response.toString());
+
+        return http_response;
 	}
 }

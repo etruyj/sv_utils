@@ -14,7 +14,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class Print
 {
@@ -22,7 +22,7 @@ public class Print
 	//	PRINT FUNCTIONS
 	//==============================================
 
-	public static void help(String file_name)
+	public static void textFile(String file_name)
 	{
 		try
 		{
@@ -45,7 +45,7 @@ public class Print
 		}
 	}
 
-	public static void debug(ArrayList<OutputFormat> output)
+	public static void debug(List<OutputFormat> output)
 	{
 		for(int i=0; i<output.size(); i++)
 		{
@@ -70,7 +70,7 @@ public class Print
 		System.out.println(value);
 	}
 
-	public static void shell(ArrayList<OutputFormat> output)
+	public static void shell(List<OutputFormat> output)
 	{
 		// formats output for standard shell format.
 

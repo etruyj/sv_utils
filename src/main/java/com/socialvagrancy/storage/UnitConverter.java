@@ -5,15 +5,14 @@
 
 package com.socialvagrancy.utils.storage;
 
-import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 public class UnitConverter
 {
-	public static String bytesToHumanReadable(BigInteger bytes)
+	public static String bytesToHumanReadable(BigDecimal val)
 	{
-		BigDecimal val = new BigDecimal(bytes);
 		String unit = "B";
 
 		while(val.compareTo(new BigDecimal("1024"))==1)
@@ -51,9 +50,7 @@ public class UnitConverter
 
 	public static String bytesToHumanReadable(String bytes)
 	{
-		BigInteger val = new BigInteger(bytes);
-
-		return bytesToHumanReadable(val);
+		return bytesToHumanReadable(new BigDecimal(bytes));
 	}
 
 	public static BigInteger humanReadableToBytes(String value)

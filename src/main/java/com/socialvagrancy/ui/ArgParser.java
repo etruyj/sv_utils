@@ -151,7 +151,7 @@ public class ArgParser
 		throw new Exception("Unable to parse value " + arg_map.get(value));
 	}
 
-	public String get(String value) throws Exception
+	public String getRequired(String value) throws Exception
 	{
 		if(arg_map.get(value) == null)
 		{
@@ -167,22 +167,8 @@ public class ArgParser
 		}
 	}
 
-    public String get(String value, boolean return_null_if_not_exists) throws Exception {
-        if(arg_map.get(value) == null && return_null_if_not_exists) {
-            return null;
-        }
-        else if(arg_map.get(value) == null)
-		{
-			throw new Exception("Required field [" + value + "] was not set. Please set with --" + value + " when executing the script.");
-		}
-		else if(arg_map.get(value).equals(""))
-		{
-			throw new Exception("Incorrect value selected for [" + value + "].");
-		}
-		else
-		{
-			return arg_map.get(value);
-		}
+    public String get(String value) throws Exception {
+        return arg_map.get(value);
     } 
 
     public int getInt(String value) throws Exception {
@@ -208,10 +194,7 @@ public class ArgParser
 			// Check to see if this is the full flag name.
 			// If only a "-" is used, an abbreviated flag
 			// has been used.
-            if(args[i].equals("-h") || args[i].equals("--help")) {
-                help_flagged = true;
-            }
-            else if(args[i].substring(0, 1).equals("-"))
+            if(args[i].substring(0, 1).equals("-"))
 			{
 				if(args[i].length()==2)
 				{
