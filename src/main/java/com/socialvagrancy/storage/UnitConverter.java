@@ -64,56 +64,56 @@ public class UnitConverter
 			{
 				case "EiB":
 					input[1] = "PiB";
-					bytes.multiply(new BigInteger("1024"));
+					bytes = bytes.multiply(new BigInteger("1024"));
 					break;
 				case "PiB":
 					input[1] = "TiB";
-					bytes.multiply(new BigInteger("1024"));
+					bytes = bytes.multiply(new BigInteger("1024"));
 					break;
 				case "TiB":
 					input[1] = "GiB";
-					bytes.multiply(new BigInteger("1024"));
+					bytes = bytes.multiply(new BigInteger("1024"));
 					break;
 				case "GiB":
 					input[1] = "MiB";
-					bytes.multiply(new BigInteger("1024"));
+					bytes = bytes.multiply(new BigInteger("1024"));
 					break;
 				case "MiB":
 					input[1] = "KiB";
-					bytes.multiply(new BigInteger("1024"));
+					bytes = bytes.multiply(new BigInteger("1024"));
 					break;
 				case "KiB":
 					input[1] = "B";
-					bytes.multiply(new BigInteger("1024"));
+					bytes = bytes.multiply(new BigInteger("1024"));
 					break;
 				// Standard Unites
 				case "EB":
 					input[1] = "PB";
-					bytes.multiply(new BigInteger("1000"));
+					bytes = bytes.multiply(new BigInteger("1000"));
 					break;
 				case "PB":
 					input[1] = "TB";
-					bytes.multiply(new BigInteger("1000"));
+					bytes = bytes.multiply(new BigInteger("1000"));
 					break;
 				case "TB":
 					input[1] = "GB";
-					bytes.multiply(new BigInteger("1000"));
+					bytes = bytes.multiply(new BigInteger("1000"));
 					break;
 				case "GB":
 					input[1] = "MB";
-					bytes.multiply(new BigInteger("1000"));
+					bytes = bytes.multiply(new BigInteger("1000"));
 					break;
 				case "MB":
 					input[1] = "KB";
-					bytes.multiply(new BigInteger("1000"));
+					bytes = bytes.multiply(new BigInteger("1000"));
 					break;
 				case "KB":
 					input[1] = "B";
-					bytes.multiply(new BigInteger("1000"));
+					bytes = bytes.multiply(new BigInteger("1000"));
 					break;
 				default:
 					input[1] = "B";
-					bytes.multiply(new BigInteger("0"));
+					bytes = bytes.multiply(new BigInteger("0"));
 			}
 		}
 

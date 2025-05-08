@@ -10,12 +10,24 @@ package com.socialvagrancy.utils.ui.display;
 
 import com.socialvagrancy.utils.ui.structures.OutputFormat;
 
+import java.lang.StringBuilder;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Table
 {
-	public static void format(List<OutputFormat> output, String output_format)
+    public static void printToShell(List<OutputFormat> output, String output_format) {
+        // This function splits off the formatting of the output (CSV or table) from
+        // printing it to the shell. This allows the formatting logic to be used with
+        // other output formats.
+        List<String> toPrint = format(output, output_format);
+
+        for(String line : toPrint) {
+            System.out.println(line);
+        }
+    }
+
+	public static List<String> format(List<OutputFormat> output, String output_format)
 	{
 		int line = 0;
 		int columns = 0;
@@ -30,6 +42,8 @@ public class Table
 
 		List<String> headings = new ArrayList<String>();
 		List<String> values = new ArrayList<String>();
+
+        List<String> formattedOutput = new ArrayList<String>();
 
 		// Build the table;
 		while(building_table)
@@ -86,11 +100,11 @@ public class Table
 
 			if(output_format.equals("table"))
 			{
-				printTable(headings, values, columns);
+				formattedOutput = printTable(headings, values, columns);
 			}
 			else if(output_format.equalsIgnoreCase("csv"))
 			{
-				printCSV(headings, values, columns);
+				formattedOutput = printCSV(headings, values, columns);
 			}
 		}
 		else
@@ -100,6 +114,7 @@ public class Table
 			System.err.println("ERROR: Unable to format table for display.");
 		}
 
+        return formattedOutput;
 	}
 
 	//=======================================
@@ -141,41 +156,53 @@ public class Table
 		return column_widths;
 	}
 
-	private static void printCSV(List<String> headers, List<String> values, int columns)
+	private static List<String> printCSV(List<String> headers, List<String> values, int columns)
 	{
+        ArrayList<String> csvOutput = new ArrayList<String>();
+        StringBuilder lineBuilder = null;
+
 		int column = 0;
 		
-		// Print headers
+		// Build headers string
+        lineBuilder = new StringBuilder();
 		for(int i = 0; i < columns; i++)
 		{
-			System.out.print(headers.get(i));
+            lineBuilder.append(headers.get(i));
 			
 			if(i<columns-1)
 			{
-				System.out.print(",");
+                lineBuilder.append(",");
 			}
 		}
-		System.out.print("\n");
-		
+	    csvOutput.add(lineBuilder.toString());
+
 		// Print Values
+        lineBuilder = new StringBuilder();
 		for(int i = 0; i < values.size(); i++)
 		{
-			System.out.print(values.get(i));
+            lineBuilder.append(values.get(i));
 			column++;
 
 			if(column == columns)
 			{
-				System.out.print("\n");
+                // End of line
+                csvOutput.add(lineBuilder.toString());
+                lineBuilder = new StringBuilder();
 				column = 0;
 			}
 			else
 			{
-				System.out.print(",");
+                lineBuilder.append(",");
 			}
 		}
+
+        return csvOutput;
 	}
-	private static void printDeliminator(int columns, List<Integer> column_width, int margin)
+
+    private static String printDeliminator(int columns, List<Integer> column_width, int margin)
 	{
+        StringBuilder lineBuilder = new StringBuilder();
+
 		// Iterate through the columns
 		for(int i=0; i<column_width.size(); i++)
 		{
@@ -183,96 +210,95 @@ public class Table
 			{
 				if(j==0)
 				{
-					System.out.print("+");
+                    lineBuilder.append("+");
 				}
 				else
 				{
-					System.out.print("-");
+                    lineBuilder.append("-");
 				}
 			}
 		}
 
 		// Line end
-		System.out.println("+");
+        lineBuilder.append("+");
 
-/*		//Print top
-		for(int i = 0; i<(column_width*columns); i++)
-		{
-			if(i%column_width==0)
-			{
-				System.out.print("+");
-			}
-			else
-			{
-				System.out.print("-");
-			}
-		}
-		System.out.println("+");
-*/
+        return lineBuilder.toString();
 	}
 
-	private static void printTable(List<String> headers, List<String> values, int columns)
+	private static List<String> printTable(List<String> headers, List<String> values, int columns)
 	{
+        ArrayList<String> tableOutput = new ArrayList<String>();
+        StringBuilder lineBuilder = null;
+
 		int column = 0;
 		//int column_width = 30;
 		int margin = 2;
 		List<Integer> column_widths = calculateColumnWidths(headers, values);
 
 		// Print Top Bar
-		printDeliminator(columns, column_widths, margin);
+		tableOutput.add(printDeliminator(columns, column_widths, margin));
 
 		// Print headers
-		for(int i = 0; i < columns; i++)
+        lineBuilder = new StringBuilder();
+        for(int i = 0; i < columns; i++)
 		{
 			int padding = (column_widths.get(i) + (2 * margin)) - (margin + headers.get(i).length() + 1); // Extra space is column size minus consumed.
-			System.out.print("|");
+			lineBuilder.append("|");
 		
 			for(int j=0; j<margin; j++)
 			{
-				System.out.print(" ");
+                lineBuilder.append(" ");
 			}
 
-			System.out.print(headers.get(i));
+            lineBuilder.append(headers.get(i));
 
 			for(int k=0; k<padding; k++)
 			{
-				System.out.print(" ");
+                lineBuilder.append(" ");
 			}
 		}
-		System.out.println("|");
-		
+        // End the line
+        lineBuilder.append("|");
+		tableOutput.add(lineBuilder.toString());
+
 		// Print Bar
-		printDeliminator(columns, column_widths, margin);
+		tableOutput.add(printDeliminator(columns, column_widths, margin));
 		
 		// Print Values
+        lineBuilder = new StringBuilder();
 		for(int i = 0; i < values.size(); i++)
 		{
 			int padding = (column_widths.get(column) + (2 * margin)) - (margin + values.get(i).length() + 1);
-			System.out.print("|");
+			lineBuilder.append("|");
 		
 			for(int j=0; j<margin; j++)
 			{
-				System.out.print(" ");
+				lineBuilder.append(" ");
 			}
 
-			System.out.print(values.get(i));
+			lineBuilder.append(values.get(i));
 
 			for(int k=0; k<padding; k++)
 			{
-				System.out.print(" ");
+				lineBuilder.append(" ");
 			}
 
 			column++;
 
 			if(column == columns)
 			{
-				System.out.println("|");
+                // End the line
+				lineBuilder.append("|");
+                tableOutput.add(lineBuilder.toString());
+                lineBuilder = new StringBuilder();
 
 				column = 0;
 				// Print Deliminator
-				printDeliminator(columns, column_widths, margin);
+				tableOutput.add(printDeliminator(columns, column_widths, margin));
 			}
 		
 		}
+
+        return tableOutput;
 	}
 }
