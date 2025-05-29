@@ -8,6 +8,7 @@ import java.io.OutputStream;
 import java.lang.StringBuilder;
 import java.net.URL;
 import java.net.HttpURLConnection;
+import java.nio.charset.StandardCharsets;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
@@ -82,6 +83,16 @@ public class RestApi
         return request("GET", httpRequest, auth_header, token, null);
 	}
 	
+	public HttpResponse patch(String httpRequest, String token, String auth_header, String body) 
+	{
+	    return request("PATCH", httpRequest, auth_header, token, body);
+    }
+	
+	public HttpResponse patch(String httpRequest, String token, String body) 
+	{
+	    return request("PATCH", httpRequest, "Authorization", token, body);
+    }
+	
 	public HttpResponse post(String httpRequest, String token, String auth_header, String body) 
 	{
 	    return request("POST", httpRequest, auth_header, token, body);
@@ -133,9 +144,11 @@ public class RestApi
 		    if(body != null && body.length() > 0)
 		    {
 		    	OutputStream output = cxn.getOutputStream();
-			    byte[] input = body.getBytes("utf-8");
-			    output.write(input, 0, input.length);
-		    }
+			    byte[] input = body.getBytes(StandardCharsets.UTF_8);
+                output.write(input, 0, input.length);
+		        output.flush();
+                output.close();
+            }
 	
             code = cxn.getResponseCode();
             message = cxn.getResponseMessage();
