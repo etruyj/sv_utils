@@ -96,6 +96,10 @@ public class RestClient
         return response;
     }
 
+    public HttpResponse get(String httpRequest) throws IOException {
+        return get(httpRequest, null, null); // Get without authentication
+    }
+
     public HttpResponse get(String httpRequest, String token) throws IOException {
         return get(httpRequest, "Authorization", token);
     }
@@ -103,9 +107,9 @@ public class RestClient
     public HttpResponse get(String httpRequest, String auth, String token) throws IOException {
         HttpGet api_call = new HttpGet(httpRequest);
         
-        api_call.setHeader("Content-Type", "application/json; utf-8");
+        api_call.setHeader("Content-Type", "application/json");
         api_call.setHeader("Accepts", "application/json");
-        api_call.setHeader(auth, token);
+        if(auth != null) api_call.setHeader(auth, token); // only set the authorization header if it's not null.
 
         HttpResponse response = http_client.execute(api_call);
 

@@ -9,8 +9,12 @@
 //======================================================
 package com.socialvagrancy.utils.io;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+
 import org.yaml.snakeyaml.Yaml;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.InputStream;
@@ -22,11 +26,9 @@ public final class Configuration<T> {
     private Configuration() {}
 
     public static <T> void create(String path, T obj, Class<T> clazz) throws Exception {
-        Yaml yaml = new Yaml();
+        ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
 
-        try (FileWriter writer = new FileWriter(path)) {
-            yaml.dump(obj, writer);
-        }
+        mapper.writeValue(new File(path), obj);
     }
 
     public static synchronized <T> void load(String path, Class<T> clazz) throws Exception {

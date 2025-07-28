@@ -108,22 +108,26 @@ public class ServerBuilder {
     }
 
     public ServerBuilder uri(String ip, int port, String api_prefix) {
-        base_uri = "http://" + ip + ":" + port + "/" + api_prefix;
+        String scheme = useHttps ? "https" : "http";
+        base_uri = scheme + "://" + ip + ":" + port + "/" + api_prefix;
         return this;
     }
 
     public ServerBuilder uri(String ip, int port) {
-        base_uri = "http://" + ip + ":" + port + "/";
+        String scheme = useHttps ? "https" : "http";
+        base_uri = scheme + "://" + ip + ":" + port + "/";
         return this;   
     }
 
     public ServerBuilder uri(String ip, String api_prefix) {
-        base_uri = "http://" + ip + "/" + api_prefix;
+        String scheme = useHttps ? "https" : "http";
+        base_uri = scheme + "://" + ip + "/" + api_prefix;
         return this;
     }    
 
     public ServerBuilder uri(String ip) {
-        base_uri = "Http://" + ip + "/";
+        String scheme = useHttps ? "https" : "http";
+        base_uri = scheme + "://" + ip + "/";
         return this;
     }
 
